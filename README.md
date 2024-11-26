@@ -24,3 +24,6 @@ le prévisionnel des tâches à réaliser :
 2 -classification des données ( test, entraînement, données finales)  
 3 -entrainement du modèle	
 4 -Raffinement du modèle		
+
+
+Il faut importer et extraire dans la même racine le dataset trouvable ici : https://github.com/marcusklasson/GroceryStoreDataset
