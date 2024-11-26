@@ -110,4 +110,70 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 model.summary()
 
 
+# Entraîner le modèle
+history = model.fit(
+    train_images, train_labels,
+    validation_data=(val_images, val_labels),
+    epochs=10,  # Nombre d'époques
+    batch_size=32,  # Taille des lots
+    verbose=1
+)
 
+#Visualisation de l'entraînement
+#Courbes de précision et de perte
+#Le suivi de la précision (accuracy) et de la perte (loss) pendant l'entraînement permet d’évaluer la convergence du modèle.
+
+# Visualiser les performances d'entraînement
+def plot_training_history(history):
+    plt.figure(figsize=(12, 5))
+
+    # Précision
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['accuracy'], label='Train Accuracy')
+    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    plt.title('Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    # Perte
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'], label='Train Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.title('Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
+# Afficher les courbes
+plot_training_history(history)
+
+
+# Évaluer le modèle sur les données de test
+test_loss, test_accuracy = model.evaluate(test_images, test_labels, verbose=1)
+print(f"Test Loss: {test_loss}")
+print(f"Test Accuracy: {test_accuracy}")
+
+# Visualisation des Prédire des classes sur l'ensemble de test
+predictions = model.predict(test_images)
+predicted_labels = np.argmax(predictions, axis=1)
+
+# Visualiser quelques prédictions
+def visualize_predictions(images, true_labels, predicted_labels, label_to_index, num_examples=5):
+    index_to_label = {v: k for k, v in label_to_index.items()}
+    plt.figure(figsize=(15, 10))
+    for i in range(num_examples):
+        img = images[i]
+        true_label = index_to_label[true_labels[i]]
+        predicted_label = index_to_label[predicted_labels[i]]
+
+        plt.subplot(1, num_examples, i + 1)
+        plt.imshow(img)
+        plt.title(f"True: {true_label}\nPredicted: {predicted_label}")
+        plt.axis("off")
+    plt.show()
+
+# Afficher les prédictions
+visualize_predictions(test_images, test_labels, predicted_labels, label_to_index)
